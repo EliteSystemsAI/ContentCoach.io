@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1>Welcome to ContentCoach</h1>
+<form action='/chat' method='post'>
+<input type='text' name='message' placeholder='Enter your idea'>
+<button type='submit'>Send</button>
+</form>
+{% endblock %}
