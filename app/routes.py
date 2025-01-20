@@ -11,4 +11,4 @@ def index():
 def chat():
     user_input = request.json.get('input')
     response = generate_content(user_input)
-    return jsonify({'response': response})
+    return response

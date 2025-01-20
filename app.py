@@ -17,7 +17,7 @@ def chat():
     user_message = request.form['message']
     try:
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",  # Supported OpenAI model
+            model="gpt-4-turbo",  # Supported OpenAI model
             messages=[
                 {"role": "system", "content": "You are a helpful content coach."},
                 {"role": "user", "content": user_message}
