@@ -1,4 +1,11 @@
 {
+  "name": "contentcoach",
+  "version": "1.0.0",
+  "description": "AI-powered content coaching platform",
+  "scripts": {
+    "build-css": "tailwindcss -i app/static/css/style.css -o app/static/css/output.css --watch",
+    "build": "tailwindcss -i app/static/css/style.css -o app/static/css/output.css"
+  },
   "devDependencies": {
     "tailwindcss": "^3.4.17"
   }

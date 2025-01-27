@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="max-w-2xl mx-auto mt-10">
+    <div class="bg-white rounded-lg shadow-md p-8">
+        <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Sign up for ContentCoach</h1>
+        
+        {% if error %}
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span class="block sm:inline">{{ error }}</span>
+        </div>
+        {% endif %}
+        
+        <div id="signup-form" class="space-y-8">
+            <!-- Step 1: Account Details -->
+            <div class="step" data-step="1">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">Create your account</h2>
+                <div class="space-y-4">
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" 
+                               id="email" 
+                               class="mt-1 w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               required>
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" 
+                               id="password" 
+                               class="mt-1 w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               required>
+                    </div>
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                        <input type="text" 
+                               id="name" 
+                               class="mt-1 w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                               required>
+                    </div>
+                </div>
+                <button onclick="nextStep(1)" 
+                        class="mt-4 w-full bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                    Next
+                </button>
+            </div>
+
+            <!-- Step 2: Business/Niche -->
+            <div class="step hidden" data-step="2">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">What's your business or niche?</h2>
+                <input type="text" 
+                       id="business_niche" 
+                       class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                       placeholder="e.g., Fitness coaching, Food blog, Tech startup"
+                       required>
+                <div class="flex gap-4 mt-4">
+                    <button onclick="prevStep(2)" 
+                            class="flex-1 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        Back
+                    </button>
+                    <button onclick="nextStep(2)" 
+                            class="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                        Next
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 3: Content Goals -->
+            <div class="step hidden" data-step="3">
+                <h2 class="text-xl font-semibold mb-4 text-gray-700">What are your content goals?</h2>
+                <select id="content_goals" 
+                        class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        required>
+                    <option value="">Select your primary goal</option>
+                    <option value="viral_reach">Maximize viral reach</option>
+                    <option value="engagement">Increase engagement</option>
+                    <option value="conversions">Drive conversions</option>
+                    <option value="brand_awareness">Build brand awareness</option>
+                    <option value="community">Grow community</option>
+                </select>
+                <div class="flex gap-4 mt-4">
+                    <button onclick="prevStep(3)" 
+                            class="flex-1 bg-gray-200 text-gray-800 px-6 py-3 rounded-lg hover:bg-gray-300 transition-colors">
+                        Back
+                    </button>
+                    <button onclick="submitForm()" 
+                            class="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+                        Create Account
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="mt-6 text-center">
+            <p class="text-sm text-gray-600">
+                Already have an account? 
+                <a href="{{ url_for('login') }}" class="font-medium text-blue-600 hover:text-blue-500">
+                    Login
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function validateEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+function validatePassword(password) {
+    return password.length >= 8;
+}
+
+function nextStep(currentStep) {
+    const currentDiv = document.querySelector(`[data-step="${currentStep}"]`);
+    const nextDiv = document.querySelector(`[data-step="${currentStep + 1}"]`);
+    
+    // Validate current step
+    if (currentStep === 1) {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const name = document.getElementById('name').value.trim();
+        
+        if (!email || !password || !name) {
+            alert('Please fill out all fields');
+            return;
+        }
+        
+        if (!validateEmail(email)) {
+            alert('Please enter a valid email address');
+            return;
+        }
+        
+        if (!validatePassword(password)) {
+            alert('Password must be at least 8 characters long');
+            return;
+        }
+    } else {
+        const input = currentDiv.querySelector('input, select');
+        if (!input.value.trim()) {
+            alert('Please fill out this field');
+            return;
+        }
+    }
+    
+    currentDiv.classList.add('hidden');
+    nextDiv.classList.remove('hidden');
+}
+
+function prevStep(currentStep) {
+    const currentDiv = document.querySelector(`[data-step="${currentStep}"]`);
+    const prevDiv = document.querySelector(`[data-step="${currentStep - 1}"]`);
+    
+    currentDiv.classList.add('hidden');
+    prevDiv.classList.remove('hidden');
+}
+
+async function submitForm() {
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const name = document.getElementById('name').value.trim();
+    const businessNiche = document.getElementById('business_niche').value.trim();
+    const contentGoals = document.getElementById('content_goals').value;
+    
+    if (!email || !password || !name || !businessNiche || !contentGoals) {
+        alert('Please fill out all fields');
+        return;
+    }
+    
+    try {
+        const response = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email,
+                password,
+                name,
+                business_niche: businessNiche,
+                content_goals: contentGoals
+            })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = '/chat';
+        } else {
+            alert(data.error || 'Error creating account. Please try again.');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error creating account. Please try again.');
+    }
+}
+</script>
+{% endblock %}

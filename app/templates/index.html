@@ -1,8 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1>Welcome to ContentCoach</h1>
-<form action='/chat' method='post'>
-<input type='text' name='message' placeholder='Enter your idea'>
-<button type='submit'>Send</button>
-</form>
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold mb-8 text-center text-gray-800">Welcome to ContentCoach</h1>
+    <div id="chat-container" class="bg-white rounded-lg shadow-md p-4 mb-4 h-[500px] overflow-y-auto">
+        <div id="chat-messages" class="space-y-4">
+            <!-- Messages will be inserted here -->
+        </div>
+    </div>
+    <form id="chat-form" class="flex gap-2">
+        <input type="text" 
+               id="message-input" 
+               name="message" 
+               placeholder="Enter your idea..." 
+               class="flex-1 p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+               required>
+        <button type="submit" 
+                class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors">
+            Send
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/app.js', v=2) }}"></script>
 {% endblock %}
